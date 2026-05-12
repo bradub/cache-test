@@ -20,6 +20,7 @@ func TestSum(t *testing.T) {
 		{name: "one", in: []int{7}, want: 7},
 		{name: "many", in: []int{1, 2, 3, 4}, want: 10},
 		{name: "negatives", in: []int{-1, -2, 3}, want: 0},
+		{name: "single negative", in: []int{-5}, want: -5},
 	}
 
 	for _, tc := range tests {
