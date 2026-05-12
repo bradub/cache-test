@@ -21,6 +21,7 @@ func TestGreet(t *testing.T) {
 	}{
 		{name: "empty", in: null.Val[string]{}, want: "hello, stranger"},
 		{name: "with name", in: null.From("alice"), want: "hello, alice"},
+		{name: "uppercase name", in: null.From("DAVE"), want: "hello, DAVE"},
 	}
 
 	for _, tc := range tests {
