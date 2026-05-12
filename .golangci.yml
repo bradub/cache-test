@@ -1,0 +1,246 @@
+version: "2"
+run:
+  modules-download-mode: readonly
+linters:
+  default: none
+  enable:
+    - bidichk
+    - bodyclose
+    - canonicalheader
+    - containedctx
+    - contextcheck
+    - copyloopvar
+    - decorder
+    - dupl
+    - dupword
+    - err113
+    - errcheck
+    - errchkjson
+    - errname
+    - exhaustive
+    - fatcontext
+    - forcetypeassert
+    - gochecksumtype
+    - goconst
+    - gocritic
+    - godot
+    - gosec
+    - gosmopolitan
+    - govet
+    - grouper
+    - importas
+    - ineffassign
+    - interfacebloat
+    - intrange
+    - loggercheck
+    - mirror
+    - mnd
+    - musttag
+    - nilnil
+    - perfsprint
+    - prealloc
+    - reassign
+    - revive
+    - sloglint
+    - spancheck
+    - staticcheck
+    - tagalign
+    - tagliatelle
+    - testifylint
+    - thelper
+    - unused
+    - usestdlibvars
+    - usetesting
+    - varnamelen
+    - wsl_v5
+    - funcorder # use AI to reorder your funcs
+    - embeddedstructfieldcheck
+  settings:
+    wsl_v5:
+      allow-first-in-block: true
+      allow-whole-block: false
+      branch-max-lines: 2
+    funcorder:
+      # Checks that constructors are placed after the structure declaration.
+      # Default: true
+      constructor: true
+      # Checks if the exported methods of a structure are placed before the unexported ones.
+      # Default: true
+      struct-method: true
+      # Checks if the constructors and/or structure methods are sorted alphabetically.
+      # Default: false
+      alphabetical: false
+
+    dupl:
+      threshold: 300
+    errcheck:
+      exclude-functions:
+        - (*net/http.Response.Body).Close
+        - (io.ReadCloser).Close
+    gocognit:
+      min-complexity: 20
+    goconst:
+      min-len: 2
+      min-occurrences: 4
+    gocritic:
+      disabled-checks:
+        - dupImport
+        - whyNoLint
+        - hugeParam
+      enabled-tags:
+        - diagnostic
+        - experimental
+        - opinionated
+        - performance
+        - style
+    gocyclo:
+      min-complexity: 20
+    gosec:
+      excludes:
+        - G307
+    misspell:
+      locale: US
+    mnd:
+      checks:
+        - argument
+        - case
+        - condition
+        - return
+    nolintlint:
+      require-explanation: true
+      require-specific: false
+      allow-unused: false
+    spancheck:
+      # finishSpan in app/command/tracing.go and app/query/tracing.go
+      # calls span.End() / RecordError / SetStatus via the named-return
+      # error, but spancheck only inspects literal call syntax (not
+      # transitive calls inside helpers) and the v2 config schema
+      # doesn't expose extra-end-call-functions. Handlers using the
+      # helper add a function-level //nolint:spancheck — see
+      # app/command/tracing.go for the rationale.
+      ignore-check-signatures:
+        - finishSpan
+    revive:
+      confidence: 0.1
+      enable-all-rules: true
+      rules:
+        - name: nested-structs
+          disabled: true
+        - name: function-result-limit
+          arguments:
+            - 3
+        - name: function-length
+          disabled: true
+        - name: banned-characters
+          disabled: true
+        - name: max-public-structs
+          disabled: true
+        - name: line-length-limit
+          arguments:
+            - 100
+        - name: argument-limit
+          disabled: true
+        - name: cyclomatic
+          disabled: true
+        - name: file-header
+          disabled: true
+        - name: cognitive-complexity
+          disabled: true
+        - name: package-comments
+          disabled: true
+        - name: add-constant
+          disabled: true
+        - name: unhandled-error
+          disabled: true
+        - name: flag-parameter
+          disabled: true
+        - name: var-naming
+          arguments:
+            - []
+            - - WS
+              - VM
+    staticcheck:
+      checks:
+        - "all"
+        - "-SA1000"
+        - "-ST1000"
+        - "-ST1003"
+        - "-SA1001"
+    tagliatelle:
+      case:
+        rules:
+          json: snake
+        use-field-name: true
+    varnamelen:
+      max-distance: 15
+      ignore-names:
+        - tx
+        - err
+        - pk
+        - to
+        - db
+        - wg
+        - id
+        - DB
+      ignore-type-assert-ok: true
+      ignore-map-index-ok: true
+      ignore-chan-recv-ok: true
+      ignore-decls:
+        - t testing.T
+        - i int
+        - T any
+        - i *is.I
+        - eg *errgroup.Group
+        - ok bool
+        - g *game.Game
+        - g models.Game
+        - gm *game.Game
+        - gm *models.Game
+        - w http.ResponseWriter
+        - r *round.Round
+        - r *http.Request
+  exclusions:
+    generated: lax
+    rules:
+      - linters:
+          - containedctx
+          - err113
+          - errcheck
+          - forcetypeassert
+          - goconst
+          - gocognit
+          - gocyclo
+          - gosec
+          - nilnil
+          - testifylint
+          - varnamelen
+          - wsl_v5
+        path: _test\.go
+      - linters:
+          - dupl
+          - errcheck
+          - forcetypeassert
+          - gocyclo
+          - gosec
+          - mnd
+          - revive
+        path: mock
+    paths:
+      - vendor
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofumpt
+  settings:
+    gofumpt:
+      extra-rules: true
+  exclusions:
+    generated: lax
+    paths:
+      - vendor
+      - third_party$
+      - builtin$
+      - examples$
