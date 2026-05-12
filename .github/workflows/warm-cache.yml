@@ -69,13 +69,6 @@ jobs:
           key: golangci-lint-bin-${{ runner.os }}-${{ env.GOLANGCI_LINT_VERSION }}-go${{ env.GO_VERSION }}
           fail-on-cache-miss: true
 
-      - name: Restore nilaway binary
-        uses: actions/cache/restore@v5
-        with:
-          path: ~/go/bin/nilaway
-          key: nilaway-${{ runner.os }}-${{ env.NILAWAY_VERSION }}-go${{ env.GO_VERSION }}
-          fail-on-cache-miss: true
-
       - name: Cache golangci-lint analysis
         uses: actions/cache@v5
         with:
@@ -93,7 +86,3 @@ jobs:
       - name: Prime golangci-lint analysis cache
         continue-on-error: true
         run: golangci-lint run --issues-exit-code=0 --timeout=5m ./...
-
-      - name: Prime nilaway analysis cache
-        continue-on-error: true
-        run: nilaway ./...
